@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Col, Form, Row, Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import MainScreen from "../../components/MainScreen";
 import ErrorMessage from "../../components/ErrorMessage";
 import Loading from "../../components/Loading";
 import "./RegisterScreen.css";
-import axios from "axios";
-const RegisterScreen = () => {
+import { useDispatch, useSelector } from "react-redux";
+import { register } from "../../actions/userActions";
+
+const RegisterScreen = ({ history }) => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [pic, setPic] = useState(
@@ -16,33 +18,26 @@ const RegisterScreen = () => {
   const [confirmpassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState(null);
   const [picMessage, setPicMessage] = useState(null);
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState("");
+
+  const dispatch = useDispatch();
+
+  const userRegister = useSelector((state) => state.userRegister);
+  const { loading, error, userInfo } = userRegister;
+
+  useEffect(() => {
+    if (userInfo) {
+      history.push("/mynotes");
+    }
+  }, [history, userInfo]);
 
   const submitHandler = async (e) => {
     e.preventDefault();
 
     if (password !== confirmpassword) {
-      setMessage("Password Do not Match");
+      setMessage("Password does not match");
     } else {
-      setMessage(null);
-
-      try {
-        setLoading(true);
-        const { data } = await axios.post("http://localhost:5000/api/users", {
-          name,
-          pic,
-          email,
-          password,
-        });
-        setLoading(false);
-        localStorage.setItem("userInfo", JSON.stringify(data));
-      } catch (error) {
-        setError(error.response.data.message);
-      }
+      dispatch(register(name, email, password, pic));
     }
-
-    console.log(email);
   };
 
   const postDetails = (pics) => {
