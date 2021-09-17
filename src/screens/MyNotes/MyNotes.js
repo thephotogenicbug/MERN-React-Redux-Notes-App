@@ -82,7 +82,11 @@ const MyNotes = () => {
               </h4>
               <blockquote className="blockquote mb-0">
                 <p>{note.content}</p>
-                <footer className="blockquote-footer">Created on - date</footer>
+                <footer className="blockquote-footer">Created on - {""}
+                   <cite title="Source Title">
+                    {note.createdAt.substring(0, 10)}
+                   </cite>
+                </footer>
               </blockquote>
             </Card.Body>
           </Card>
