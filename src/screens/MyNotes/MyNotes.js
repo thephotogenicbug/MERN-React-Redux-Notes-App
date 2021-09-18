@@ -16,6 +16,9 @@ const MyNotes = () => {
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
+  const noteCreate = useSelector((state) => state.noteCreate);
+  const { success: successCreate } = noteCreate;
+
   const deleteHandler = (id) => {
     if (window.confirm("Are you sure?")) {
     }
@@ -30,7 +33,7 @@ const MyNotes = () => {
     if (!userInfo) {
       history.push("/");
     }
-  }, [dispatch]);
+  }, [dispatch, successCreate, history, userInfo]);
 
   return (
     <MainScreen title={`Welcome Back ${userInfo.name}`}>
@@ -45,7 +48,7 @@ const MyNotes = () => {
       </Link>
       {error && <ErrorMessage>{error}</ErrorMessage>}
       {loading && <Loading />}
-      {notes?.map((note) => (
+      {notes?.reverse.map((note) => (
         <Accordion key={note._id}>
           <Card style={{ margin: 10 }}>
             <Card.Header style={{ display: "flex" }}>
@@ -82,10 +85,11 @@ const MyNotes = () => {
               </h4>
               <blockquote className="blockquote mb-0">
                 <p>{note.content}</p>
-                <footer className="blockquote-footer">Created on - {""}
-                   <cite title="Source Title">
+                <footer className="blockquote-footer">
+                  Created on - {""}
+                  <cite title="Source Title">
                     {note.createdAt.substring(0, 10)}
-                   </cite>
+                  </cite>
                 </footer>
               </blockquote>
             </Card.Body>
