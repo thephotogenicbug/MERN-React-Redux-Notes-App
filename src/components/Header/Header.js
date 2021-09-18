@@ -9,7 +9,7 @@ import {
 import { Link, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../actions/userActions";
-const Header = () => {
+const Header = ({ setSearch }) => {
   const history = useHistory();
 
   const dispatch = useDispatch();
@@ -31,7 +31,12 @@ const Header = () => {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav>
-            <FormControl type="text" placeholder="Search" className="ml-sm-2" />
+            <FormControl
+              type="text"
+              placeholder="Search"
+              className="ml-sm-2"
+              onChange={(e) => setSearch(e.target.value)}
+            />
           </Nav>
 
           <Nav className="ml-auto">
